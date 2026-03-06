@@ -1,4 +1,4 @@
-# Clinic Automation System
+# Clinic Booking & Verification Automation
 
 Google Apps Script automates clinic bookings via Google Calendar, Sheets, and Telegram. It enforces a 4-day SLA for form submissions, auto-cancels unverified slots, and enables instant staff approval/cancellation with automated patient emails.
 
@@ -21,23 +21,35 @@ This system serves as a bridge between patient bookings and administrative manag
 * **Reduced No-Shows**: The SLA ensures that only committed patients retain their slots, freeing up time for others.
 * **Real-Time Updates**: Integration with Telegram ensures staff are aware of new data without needing to check the spreadsheet constantly.
 
+## Technical Requirements
+
+* **Google Workspace Account**: Required for access to Sheets, Calendar, and Gmail.
+* **Telegram Bot**: A bot token and Chat ID are necessary for real-time notifications.
+* **Google Form**: Used to collect patient verification data linked to the spreadsheet.
+* **Specific Triggers**: Requires Time-driven, On Form Submit, and On Edit triggers for full automation.
+
 ## How Users Can Get Started
 
-1. **Prepare the Sheet**: Create a Google Sheet with specific headers: `EventID`, `Nama`, `Status Semakan`, and `Disemak Oleh`.
+1. **Prepare the Sheet**: Create a Google Sheet with two tabs:
+* **Main Database**: Headers must include `EventID`, `Nama`, and `Status Semakan`.
+* **Staff List**: Staff names in Column A and Telegram usernames in Column C.
 
-2. **Configure Script**: Copy the code into a Google Apps Script project and update the `SPREADSHEET_ID`, `CALENDAR_ID`, and Telegram credentials.
+2. **Configure Script**: Copy the code into a Google Apps Script project and update the following constants:
+* `SPREADSHEET_ID` 
+* `CALENDAR_ID` 
+* `TELEGRAM_BOT_TOKEN` & `TELEGRAM_CHAT_ID` 
+* `FORM_URL` & `FORM_ENTRY_ID` 
 
 3. **Deploy Triggers**:
-* Set `checkNewBookings` to a time-driven trigger to handle periodic calendar scans.
-* Set `onFormSubmit` to a "From spreadsheet - On form submit" trigger.
-* Set `onStatusEdit` to a "From spreadsheet - On edit" trigger.
+* Set `checkNewBookings` to a **Time-driven** trigger (e.g., hourly).
+* Set `onFormSubmit` to an **On form submit** trigger.
+* Set `onStatusEdit` to an **On edit** trigger.
 
+## Known Limitations
 
-## Where Users Can Get Help
-
-* **Documentation**: Refer to the configuration comments at the top of the script for proper ID placement.
-* **Staff Lookup**: Ensure the staff sheet contains names and Telegram usernames to enable automatic mentions.
-* **Logs**: Use the Google Apps Script execution logs to troubleshoot errors such as missing "EventID" columns.
+* **Email Quotas**: Subject to daily limits imposed by Google on outgoing emails.
+* **Trigger Latency**: Time-based triggers may not execute at the exact minute specified.
+* **Data Dependencies**: The system requires the `EventID` to be accurately passed from the form for row-matching.
 
 ## Who Maintains the Project
 
